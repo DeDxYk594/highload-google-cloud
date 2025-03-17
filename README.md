@@ -377,11 +377,14 @@ erDiagram
     }
 
     AUTH_SESSION {
-
+        int64 session_id PK
+        int64 user_id FK
     }
 
     USER_QUOTA {
-
+        int64 user_id PK
+        datetime valid_until
+        int64 quota_kb
     }
 
     NODE {
@@ -392,48 +395,105 @@ erDiagram
     }
 
     FILE_IN_STORAGE {
-
+        int64 file_id PK
+        int64 bucket_id
+        int64 object_id
+        int64 size_kb
+        string hash
+        string prefix_64
+        int64 ref_count
     }
 
     TRASHED_NODE {
-
+        int64 trashed_node_id PK
+        int64 node_id FK
+        int64 user_id FK
+        datetime store_until
     }
 
     DIRECTORY_ATTRIBUTES {
-
+        int64 dir_id PK
+        int64 size_kb
+        int64 nodes_count
+        int64 owner_id
     }
 
     VIDEO_ATTRIBUTES {
-
+        int64 video_id PK
+        int64 duration_seconds
+        int64 thumbnail_file_id FK
     }
 
     IMAGE_ATTRIBUTES {
-
+        datetime made_at
+        int64 thumbnail_file_id FK
     }
 
     ARCHIVE_ATTRIBUTES {
-
+        int64 archive_id PK
+        int64 preview_node_id
+        int compression_percent
     }
 
     SHARE_LINK {
-
+        int64 link_id PK
+        int64 created_by FK
+        int64 node_id FK
+        enum allowed_actions
     }
 
     COLLABORATOR {
-
+        int64 user_id PK
+        int64 node_id PK
+        enum allowed_actions
     }
 
     FAVOURITE_FILE {
+        int64 user_id
+        int64 node_id
+    }
 
+    USER_TO_VIDEO{
+        int64 video_id PK
+        int64 user_id PK
+        int64 timestamp_seconds
     }
 
     NODE_INTERACTION {
-
+        int64 interaction_id PK
+        int64 user_id FK
+        int64 node_id FK
+        enum interaction_type
+        datetime interaction_at
     }
 
     SEARCH_FACT {
-
+        int64 search_query_id PK
+        int64 user_id FK
+        string query
+        datetime query_at
     }
+
+    USER ||--|| USER_QUOTA: ограничивается
+    USER ||--o{ AUTH_SESSION: авторизован
+    NODE }o--|| FILE_IN_STORAGE: ссылается
+    TRASHED_NODE |o--|| NODE: ссылается
+    DIRECTORY_ATTRIBUTES ||--o| NODE: имеет
+    VIDEO_ATTRIBUTES ||--o| NODE: имеет
+    IMAGE_ATTRIBUTES ||--o| NODE: имеет
+    ARCHIVE_ATTRIBUTES ||--o| NODE: имеет
+    ARCHIVE_ATTRIBUTES ||--|| NODE: просматривается
+    NODE ||--o{ SHARE_LINK: ссылается
+    NODE ||--o{ COLLABORATOR: уполномочен
+    NODE ||--o{ FAVOURITE_FILE: ссылается
+    USER ||--o{ SEARCH_FACT: искал
+    USER ||--o{ NODE_INTERACTION: взаимодействовал
+    USER ||--o{ USER_TO_VIDEO: смотрел
+    USER ||--o{ TRASHED_NODE: удалил
+    USER ||--o{ DIRECTORY_ATTRIBUTES: владеет
+    FILE_IN_STORAGE ||--o{ VIDEO_ATTRIBUTES: смотрит
+    FILE_IN_STORAGE ||--o{ IMAGE_ATTRIBUTES: смотрит
+    VIDEO_ATTRIBUTES }o--|| USER_TO_VIDEO: имеет
 ```
 
 <table>
