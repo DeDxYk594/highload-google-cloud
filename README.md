@@ -396,6 +396,7 @@ erDiagram
         int64 video_id FK
         int64 image_id FK
         int64 archive_id FK
+        int64 file_id FK
     }
 
     FILE_IN_STORAGE {
@@ -417,18 +418,21 @@ erDiagram
 
     DIRECTORY_ATTRIBUTES {
         int64 dir_id PK
+        int64 node_id FK
         int64 size_kb
         int64 nodes_count
     }
 
     VIDEO_ATTRIBUTES {
         int64 video_id PK
+        int64 node_id FK
         int64 duration_seconds
         int64 thumbnail_file_id FK
     }
 
     IMAGE_ATTRIBUTES {
         datetime made_at
+        int64 node_id FK
         int64 thumbnail_file_id FK
         real location_att
         real location_long
@@ -438,9 +442,18 @@ erDiagram
 
     ARCHIVE_ATTRIBUTES {
         int64 archive_id PK
+        int64 node_id FK
         int64 preview_node_id
         bool is_dirty
         int compression_percent
+    }
+
+    VIDEO_BUFFER {
+        int64 buf_id PK
+        int64 session_id FK
+        int64 video_id FK
+        int64 datacenter_id
+        datetime store_until
     }
 
     SHARE_LINK {
@@ -505,6 +518,8 @@ erDiagram
     USER ||--o{ FAVOURITE_FILE: marked_as_favourite
     COLLABORATOR }o--|| USER: who_is_allowed
     SHARE_LINK }o--|| USER: who_created
+    VIDEO_BUFFER }o--|| SESSION_ID: prepared_for
+    VIDEO_BUFFER }o--|| VIDEO_ATTRIBUTES: cached_in
 ```
 
 <table>
