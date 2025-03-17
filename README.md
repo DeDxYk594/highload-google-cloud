@@ -392,6 +392,10 @@ erDiagram
         string name
         datetime loaded_at
         int64 owner_id FK
+        int64 dir_id FK
+        int64 video_id FK
+        int64 image_id FK
+        int64 archive_id FK
     }
 
     FILE_IN_STORAGE {
@@ -415,7 +419,6 @@ erDiagram
         int64 dir_id PK
         int64 size_kb
         int64 nodes_count
-        int64 owner_id
     }
 
     VIDEO_ATTRIBUTES {
@@ -427,11 +430,16 @@ erDiagram
     IMAGE_ATTRIBUTES {
         datetime made_at
         int64 thumbnail_file_id FK
+        real location_att
+        real location_long
+        int64 width
+        int64 height
     }
 
     ARCHIVE_ATTRIBUTES {
         int64 archive_id PK
         int64 preview_node_id
+        bool is_dirty
         int compression_percent
     }
 
@@ -494,6 +502,9 @@ erDiagram
     FILE_IN_STORAGE ||--o{ VIDEO_ATTRIBUTES: has_thumbnail
     FILE_IN_STORAGE ||--o{ IMAGE_ATTRIBUTES: has_thumbnail
     VIDEO_ATTRIBUTES }o--|| USER_TO_VIDEO: what
+    USER ||--o{ FAVOURITE_FILE: marked_as_favourite
+    COLLABORATOR }o--|| USER: who_is_allowed
+    SHARE_LINK }o--|| USER: who_created
 ```
 
 <table>
