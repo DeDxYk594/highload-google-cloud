@@ -392,11 +392,14 @@ erDiagram
         string name
         datetime loaded_at
         int64 owner_id FK
+        datetime updated_at
+        int64 updated_by
         int64 dir_id FK
         int64 video_id FK
         int64 image_id FK
         int64 archive_id FK
         int64 file_id FK
+        enum type
     }
 
     FILE_IN_STORAGE {
