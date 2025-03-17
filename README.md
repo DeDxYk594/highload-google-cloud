@@ -474,26 +474,26 @@ erDiagram
         datetime query_at
     }
 
-    USER ||--|| USER_QUOTA: ограничивается
-    USER ||--o{ AUTH_SESSION: авторизован
-    NODE }o--|| FILE_IN_STORAGE: ссылается
-    TRASHED_NODE |o--|| NODE: ссылается
-    DIRECTORY_ATTRIBUTES ||--o| NODE: имеет
-    VIDEO_ATTRIBUTES ||--o| NODE: имеет
-    IMAGE_ATTRIBUTES ||--o| NODE: имеет
-    ARCHIVE_ATTRIBUTES ||--o| NODE: имеет
-    ARCHIVE_ATTRIBUTES ||--|| NODE: просматривается
-    NODE ||--o{ SHARE_LINK: ссылается
-    NODE ||--o{ COLLABORATOR: уполномочен
-    NODE ||--o{ FAVOURITE_FILE: ссылается
-    USER ||--o{ SEARCH_FACT: искал
-    USER ||--o{ NODE_INTERACTION: взаимодействовал
-    USER ||--o{ USER_TO_VIDEO: смотрел
-    USER ||--o{ TRASHED_NODE: удалил
-    USER ||--o{ DIRECTORY_ATTRIBUTES: владеет
-    FILE_IN_STORAGE ||--o{ VIDEO_ATTRIBUTES: смотрит
-    FILE_IN_STORAGE ||--o{ IMAGE_ATTRIBUTES: смотрит
-    VIDEO_ATTRIBUTES }o--|| USER_TO_VIDEO: имеет
+    USER ||--|| USER_QUOTA: quoted_with
+    USER ||--o{ AUTH_SESSION: authorized
+    NODE }o--|| FILE_IN_STORAGE: references_to
+    TRASHED_NODE |o--|| NODE: references_to
+    DIRECTORY_ATTRIBUTES ||--o| NODE: have_attributes
+    VIDEO_ATTRIBUTES ||--o| NODE: have_attributes
+    IMAGE_ATTRIBUTES ||--o| NODE: have_attributes
+    ARCHIVE_ATTRIBUTES ||--o| NODE: have_attributes
+    ARCHIVE_ATTRIBUTES ||--|| NODE: have_preview
+    NODE ||--o{ SHARE_LINK: shared_with
+    NODE ||--o{ COLLABORATOR: have_access_to
+    NODE ||--o{ FAVOURITE_FILE: is_favourite
+    USER ||--o{ SEARCH_FACT: did_query
+    USER ||--o{ NODE_INTERACTION: who_interacted
+    NODE ||--o{ NODE_INTERACTION: interacted_with
+    USER ||--o{ USER_TO_VIDEO: who_played
+    USER ||--o{ TRASHED_NODE: who_deleted
+    FILE_IN_STORAGE ||--o{ VIDEO_ATTRIBUTES: has_thumbnail
+    FILE_IN_STORAGE ||--o{ IMAGE_ATTRIBUTES: has_thumbnail
+    VIDEO_ATTRIBUTES }o--|| USER_TO_VIDEO: what
 ```
 
 <table>
