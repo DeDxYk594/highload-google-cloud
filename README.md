@@ -470,10 +470,16 @@ erDiagram
         int64 node_id
     }
 
-    USER_TO_VIDEO{
+    USER_TO_VIDEO {
         int64 video_id PK
         int64 user_id PK
         int64 timestamp_seconds
+    }
+
+    ELASTIC_SEARCH {
+        int64 node_id
+        text text
+        text filename
     }
 
     NODE_INTERACTION {
@@ -523,6 +529,7 @@ erDiagram
     VIDEO_BUFFER }o--|| AUTH_SESSION: prepared_for
     VIDEO_BUFFER }o--|| VIDEO_ATTRIBUTES: cached_in
     FILE_IN_STORAGE ||--|| BLOB: stores_file
+    NODE ||--|| ELASTIC_SEARCH: indexed_at
 ```
 
 Применяемые СУБД:
