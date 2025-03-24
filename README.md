@@ -388,6 +388,7 @@ erDiagram
     }
 
     NODE {
+        int64 parent_node_id PK
         int64 node_id PK
         string name
         datetime loaded_at
@@ -395,7 +396,6 @@ erDiagram
         datetime updated_at
         int64 updated_by
         enum type
-        int64 parent_node_id
     }
 
     FILE_IN_STORAGE {
