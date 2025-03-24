@@ -395,6 +395,7 @@ erDiagram
         datetime updated_at
         int64 updated_by
         enum type
+        int64 parent_node_id
     }
 
     FILE_IN_STORAGE {
@@ -528,7 +529,7 @@ erDiagram
 
 - YDB
 - ElasticSearch
-- Самописный S3 сервер
+- CEPH в качестве S3 хранилища
 - Redis
 
 <table>
@@ -541,19 +542,19 @@ erDiagram
 
 <tr><td>UserQuota</td><td>Кеш для внешнего сервиса биллинга</td><td>Redis</td><td>$10^9$</td><td></td></tr>
 
-<tr><td>Node</td><td>Обычный файл или директория - аналог файла в Unix</td><td>YDB</td><td>$10^14$</td><td></td></tr>
+<tr><td>Node</td><td>Обычный файл или директория - аналог файла в Unix</td><td>YDB</td><td>$10^14$</td><td>parent_node_id</td></tr>
 
 <tr><td>FileInStorage</td><td>Файл, который хранится в объектном хранилище</td><td>YDB</td><td>$10^14$</td><td></td></tr>
 
 <tr><td>TrashedNode</td><td>Файл, который находится в корзине</td><td>YDB</td><td>$10^10$</td><td></td></tr>
 
-<tr><td>DirectoryAttributes</td><td>Атрибуты директории - только для файлов директорий</td><td>YDB</td><td>$10^12$</td><td></td></tr>
+<tr><td>DirectoryAttributes</td><td>Атрибуты директории - только для файлов директорий</td><td>Redis</td><td>$10^12$</td><td></td></tr>
 
-<tr><td>VideoAttributes</td><td>Атрибуты видео - только для файлов видео</td><td>YDB</td><td>$10^12$</td><td></td></tr>
+<tr><td>VideoAttributes</td><td>Атрибуты видео - только для файлов видео</td><td>Redis</td><td>$10^12$</td><td></td></tr>
 
-<tr><td>ImageAttributes</td><td>Атрибуты изображения - только для файлов изображений</td><td>YDB</td><td>$10^10$</td><td></td></tr>
+<tr><td>ImageAttributes</td><td>Атрибуты изображения - только для файлов изображений</td><td>Redis</td><td>$10^10$</td><td></td></tr>
 
-<tr><td>ArchiveAttributes</td><td>Атрибуты архива - только для файлов zip и rar и tar</td><td>YDB</td><td>$10^10$</td><td></td></tr>
+<tr><td>ArchiveAttributes</td><td>Атрибуты архива - только для файлов zip и rar и tar</td><td>Redis</td><td>$10^10$</td><td></td></tr>
 
 <tr><td>ShareLink</td><td>Ссылка, по которой пользователь может просматривать файлы или присоединиться к работе
 над директорией</td><td>YDB</td><td>$10^10$</td><td></td></tr>
@@ -583,14 +584,6 @@ CREATE INDEX idx_auth_session_user_id ON AUTH_SESSION(user_id);
 
 CREATE INDEX idx_node_owner_id ON NODE(owner_id);
 CREATE INDEX idx_node_updated_by ON NODE(updated_by);
-
-CREATE INDEX idx_video_attributes_thumbnail_file_id ON VIDEO_ATTRIBUTES(thumbnail_file_id);
-
-CREATE INDEX idx_image_attributes_node_id ON IMAGE_ATTRIBUTES(node_id);
-CREATE INDEX idx_image_attributes_thumbnail_file_id ON IMAGE_ATTRIBUTES(thumbnail_file_id);
-
-CREATE INDEX idx_archive_attributes_node_id ON ARCHIVE_ATTRIBUTES(node_id);
-CREATE INDEX idx_archive_attributes_preview_node_id ON ARCHIVE_ATTRIBUTES(preview_node_id);
 
 CREATE INDEX idx_video_buffer_session_id ON VIDEO_BUFFER(session_id);
 CREATE INDEX idx_video_buffer_video_id ON VIDEO_BUFFER(video_id);
