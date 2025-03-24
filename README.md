@@ -394,11 +394,6 @@ erDiagram
         int64 owner_id FK
         datetime updated_at
         int64 updated_by
-        int64 dir_id FK
-        int64 video_id FK
-        int64 image_id FK
-        int64 archive_id FK
-        int64 file_id FK
         enum type
     }
 
@@ -413,22 +408,19 @@ erDiagram
     }
 
     TRASHED_NODE {
-        int64 trashed_node_id PK
-        int64 node_id FK
+        int64 node_id PK
         int64 user_id FK
         datetime store_until
     }
 
     DIRECTORY_ATTRIBUTES {
-        int64 dir_id PK
-        int64 node_id FK
+        int64 node_id PK
         int64 size_kb
         int64 nodes_count
     }
 
     VIDEO_ATTRIBUTES {
-        int64 video_id PK
-        int64 node_id FK
+        int64 node_id PK
         int64 duration_seconds
         int64 thumbnail_file_id FK
     }
@@ -506,7 +498,7 @@ erDiagram
     VIDEO_ATTRIBUTES ||--o| NODE: have_attributes
     IMAGE_ATTRIBUTES ||--o| NODE: have_attributes
     ARCHIVE_ATTRIBUTES ||--o| NODE: have_attributes
-    ARCHIVE_ATTRIBUTES ||--|| NODE: have_preview
+    ARCHIVE_ATTRIBUTES ||--o| NODE: have_preview
     NODE ||--o{ SHARE_LINK: shared_with
     NODE ||--o{ COLLABORATOR: have_access_to
     NODE ||--o{ FAVOURITE_FILE: is_favourite
@@ -525,44 +517,51 @@ erDiagram
     VIDEO_BUFFER }o--|| VIDEO_ATTRIBUTES: cached_in
 ```
 
+Применяемые СУБД:
+
+- YDB
+- ElasticSearch
+- Самописный S3 сервер
+- Redis
+
 <table>
 
-<tr><th>Таблица</th><th>Описание</th></tr>
+<tr><th>Таблица</th><th>Описание</th><th>СУБД</th><th>Строк<th></tr>
 
-<tr><td>User</td><td>Пользователь</td></tr>
+<tr><td>User</td><td>Пользователь</td><td>YDB</td><td>$10^10$</td></tr>
 
-<tr><td>AuthSession</td><td>Stateful-сессия пользователя</td></tr>
+<tr><td>AuthSession</td><td>Stateful-сессия пользователя</td><td>Redis</td><td>$10^10$</td></tr>
 
-<tr><td>UserQuota</td><td>Кеш для внешнего сервиса биллинга</td></tr>
+<tr><td>UserQuota</td><td>Кеш для внешнего сервиса биллинга</td><td>Redis</td><td>$10^10$</td></tr>
 
-<tr><td>Node</td><td>Обычный файл или директория - аналог файла в Unix</td></tr>
+<tr><td>Node</td><td>Обычный файл или директория - аналог файла в Unix</td><td>Redis</td><td>$10^10$</td></tr>
 
-<tr><td>FileInStorage</td><td>Файл, который хранится в объектном хранилище</td></tr>
+<tr><td>FileInStorage</td><td>Файл, который хранится в объектном хранилище</td><td>Redis</td><td>$10^10$</td></tr>
 
-<tr><td>TrashedNode</td><td>Файл, который находится в корзине</td></tr>
+<tr><td>TrashedNode</td><td>Файл, который находится в корзине</td><td>Redis</td><td>$10^10$</td></tr>
 
-<tr><td>DirectoryAttributes</td><td>Атрибуты директории - только для файлов директорий</td></tr>
+<tr><td>DirectoryAttributes</td><td>Атрибуты директории - только для файлов директорий</td><td>Redis</td><td>$10^10$</td></tr>
 
-<tr><td>VideoAttributes</td><td>Атрибуты видео - только для файлов видео</td></tr>
+<tr><td>VideoAttributes</td><td>Атрибуты видео - только для файлов видео</td><td>Redis</td><td>$10^10$</td></tr>
 
-<tr><td>ImageAttributes</td><td>Атрибуты изображения - только для файлов изображений</td></tr>
+<tr><td>ImageAttributes</td><td>Атрибуты изображения - только для файлов изображений</td><td>Redis</td><td>$10^10$</td></tr>
 
-<tr><td>ArchiveAttributes</td><td>Атрибуты архива - только для файлов zip и rar и tar</td></tr>
+<tr><td>ArchiveAttributes</td><td>Атрибуты архива - только для файлов zip и rar и tar</td><td>Redis</td><td>$10^10$</td></tr>
 
 <tr><td>ShareLink</td><td>Ссылка, по которой пользователь может просматривать файлы или присоединиться к работе
-над директорией</td></tr>
+над директорией</td><td>Redis</td><td>$10^10$</td></tr>
 
-<tr><td>Collaborator</td><td>Пользователь, который имеет права для данной директории</td></tr>
+<tr><td>Collaborator</td><td>Пользователь, который имеет права для данной директории</td><td>Redis</td><td>$10^10$</td></tr>
 
-<tr><td>FavouriteFile</td><td>Файл, который пользователь пометил как избранный</td></tr>
+<tr><td>FavouriteFile</td><td>Файл, который пользователь пометил как избранный</td><td>Redis</td><td>$10^10$</td></tr>
 
-<tr><td>NodeInteraction</td><td>Факт взаимодействия пользователя с файлом (для "недавних" файлов)</td></tr>
+<tr><td>NodeInteraction</td><td>Факт взаимодействия пользователя с файлом (для "недавних" файлов)</td><td>Redis</td><td>$10^10$</td></tr>
 
-<tr><td>SearchFact</td><td>Факт совершения поискового запроса (для истории поиска)</td></tr>
+<tr><td>SearchFact</td><td>Факт совершения поискового запроса (для истории поиска)</td><td>Redis</td><td>$10^10$</td></tr>
 
-<tr><td>VideoBuffer</td><td>Буфер видео на стороне сервера</td></tr>
+<tr><td>VideoBuffer</td><td>Буфер видео на стороне сервера</td><td>Redis</td><td>$10^10$</td></tr>
 
-<tr><td>VideoToUser</td><td>Информация о том, на какой временной метке остановился пользователь</td></tr>
+<tr><td>VideoToUser</td><td>Информация о том, на какой временной метке остановился пользователь</td><td>Redis</td><td>$10^10$</td></tr>
 
 </table>
 # Список источников
