@@ -490,6 +490,12 @@ erDiagram
         datetime query_at
     }
 
+    BLOB {
+        uuid bucket_id PK
+        uuid object_id PK
+        binary object
+    }
+
     USER ||--|| USER_QUOTA: quoted_with
     USER ||--o{ AUTH_SESSION: authorized
     NODE }o--|| FILE_IN_STORAGE: references_to
@@ -515,6 +521,7 @@ erDiagram
     SHARE_LINK }o--|| USER: who_created
     VIDEO_BUFFER }o--|| SESSION_ID: prepared_for
     VIDEO_BUFFER }o--|| VIDEO_ATTRIBUTES: cached_in
+    FILE_IN_STORAGE ||--|| BLOB: stores_file
 ```
 
 Применяемые СУБД:
@@ -534,34 +541,36 @@ erDiagram
 
 <tr><td>UserQuota</td><td>Кеш для внешнего сервиса биллинга</td><td>Redis</td><td>$10^10$</td></tr>
 
-<tr><td>Node</td><td>Обычный файл или директория - аналог файла в Unix</td><td>Redis</td><td>$10^10$</td></tr>
+<tr><td>Node</td><td>Обычный файл или директория - аналог файла в Unix</td><td>YDB</td><td>$10^10$</td></tr>
 
-<tr><td>FileInStorage</td><td>Файл, который хранится в объектном хранилище</td><td>Redis</td><td>$10^10$</td></tr>
+<tr><td>FileInStorage</td><td>Файл, который хранится в объектном хранилище</td><td>YDB</td><td>$10^10$</td></tr>
 
-<tr><td>TrashedNode</td><td>Файл, который находится в корзине</td><td>Redis</td><td>$10^10$</td></tr>
+<tr><td>TrashedNode</td><td>Файл, который находится в корзине</td><td>YDB</td><td>$10^10$</td></tr>
 
-<tr><td>DirectoryAttributes</td><td>Атрибуты директории - только для файлов директорий</td><td>Redis</td><td>$10^10$</td></tr>
+<tr><td>DirectoryAttributes</td><td>Атрибуты директории - только для файлов директорий</td><td>YDB</td><td>$10^10$</td></tr>
 
-<tr><td>VideoAttributes</td><td>Атрибуты видео - только для файлов видео</td><td>Redis</td><td>$10^10$</td></tr>
+<tr><td>VideoAttributes</td><td>Атрибуты видео - только для файлов видео</td><td>YDB</td><td>$10^10$</td></tr>
 
-<tr><td>ImageAttributes</td><td>Атрибуты изображения - только для файлов изображений</td><td>Redis</td><td>$10^10$</td></tr>
+<tr><td>ImageAttributes</td><td>Атрибуты изображения - только для файлов изображений</td><td>YDB</td><td>$10^10$</td></tr>
 
-<tr><td>ArchiveAttributes</td><td>Атрибуты архива - только для файлов zip и rar и tar</td><td>Redis</td><td>$10^10$</td></tr>
+<tr><td>ArchiveAttributes</td><td>Атрибуты архива - только для файлов zip и rar и tar</td><td>YDB</td><td>$10^10$</td></tr>
 
 <tr><td>ShareLink</td><td>Ссылка, по которой пользователь может просматривать файлы или присоединиться к работе
-над директорией</td><td>Redis</td><td>$10^10$</td></tr>
+над директорией</td><td>YDB</td><td>$10^10$</td></tr>
 
-<tr><td>Collaborator</td><td>Пользователь, который имеет права для данной директории</td><td>Redis</td><td>$10^10$</td></tr>
+<tr><td>Collaborator</td><td>Пользователь, который имеет права для данной директории</td><td>YDB</td><td>$10^10$</td></tr>
 
-<tr><td>FavouriteFile</td><td>Файл, который пользователь пометил как избранный</td><td>Redis</td><td>$10^10$</td></tr>
+<tr><td>FavouriteFile</td><td>Файл, который пользователь пометил как избранный</td><td>YDB</td><td>$10^10$</td></tr>
 
-<tr><td>NodeInteraction</td><td>Факт взаимодействия пользователя с файлом (для "недавних" файлов)</td><td>Redis</td><td>$10^10$</td></tr>
+<tr><td>NodeInteraction</td><td>Факт взаимодействия пользователя с файлом (для "недавних" файлов)</td><td>YDB</td><td>$10^10$</td></tr>
 
-<tr><td>SearchFact</td><td>Факт совершения поискового запроса (для истории поиска)</td><td>Redis</td><td>$10^10$</td></tr>
+<tr><td>SearchFact</td><td>Факт совершения поискового запроса (для истории поиска)</td><td>YDB</td><td>$10^10$</td></tr>
 
-<tr><td>VideoBuffer</td><td>Буфер видео на стороне сервера</td><td>Redis</td><td>$10^10$</td></tr>
+<tr><td>VideoBuffer</td><td>Буфер видео на стороне сервера</td><td>YDB</td><td>$10^10$</td></tr>
 
-<tr><td>VideoToUser</td><td>Информация о том, на какой временной метке остановился пользователь</td><td>Redis</td><td>$10^10$</td></tr>
+<tr><td>VideoToUser</td><td>Информация о том, на какой временной метке остановился пользователь</td><td>YDB</td><td>$10^10$</td></tr>
+
+<tr><td>Blob</td><td>Бинарное содержимое файла в объектном хранилище</td><td>S3</td><td>$10^10$</td></tr>
 
 </table>
 # Список источников
