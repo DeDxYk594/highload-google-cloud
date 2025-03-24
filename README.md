@@ -519,7 +519,7 @@ erDiagram
     USER ||--o{ FAVOURITE_FILE: marked_as_favourite
     COLLABORATOR }o--|| USER: who_is_allowed
     SHARE_LINK }o--|| USER: who_created
-    VIDEO_BUFFER }o--|| SESSION_ID: prepared_for
+    VIDEO_BUFFER }o--|| AUTH_SESSION: prepared_for
     VIDEO_BUFFER }o--|| VIDEO_ATTRIBUTES: cached_in
     FILE_IN_STORAGE ||--|| BLOB: stores_file
 ```
@@ -533,46 +533,86 @@ erDiagram
 
 <table>
 
-<tr><th>Таблица</th><th>Описание</th><th>СУБД</th><th>Строк<th></tr>
+<tr><th>Таблица</th><th>Описание</th><th>СУБД</th><th>Строк<th><th>Ключ шардирования</th></tr>
 
-<tr><td>User</td><td>Пользователь</td><td>YDB</td><td>$10^10$</td></tr>
+<tr><td>User</td><td>Пользователь</td><td>YDB</td><td>$10^10$</td><td></td></tr>
 
-<tr><td>AuthSession</td><td>Stateful-сессия пользователя</td><td>Redis</td><td>$10^10$</td></tr>
+<tr><td>AuthSession</td><td>Stateful-сессия пользователя</td><td>Redis</td><td>$10^10$</td><td></td></tr>
 
-<tr><td>UserQuota</td><td>Кеш для внешнего сервиса биллинга</td><td>Redis</td><td>$10^10$</td></tr>
+<tr><td>UserQuota</td><td>Кеш для внешнего сервиса биллинга</td><td>Redis</td><td>$10^9$</td><td></td></tr>
 
-<tr><td>Node</td><td>Обычный файл или директория - аналог файла в Unix</td><td>YDB</td><td>$10^10$</td></tr>
+<tr><td>Node</td><td>Обычный файл или директория - аналог файла в Unix</td><td>YDB</td><td>$10^14$</td><td></td></tr>
 
-<tr><td>FileInStorage</td><td>Файл, который хранится в объектном хранилище</td><td>YDB</td><td>$10^10$</td></tr>
+<tr><td>FileInStorage</td><td>Файл, который хранится в объектном хранилище</td><td>YDB</td><td>$10^14$</td><td></td></tr>
 
-<tr><td>TrashedNode</td><td>Файл, который находится в корзине</td><td>YDB</td><td>$10^10$</td></tr>
+<tr><td>TrashedNode</td><td>Файл, который находится в корзине</td><td>YDB</td><td>$10^10$</td><td></td></tr>
 
-<tr><td>DirectoryAttributes</td><td>Атрибуты директории - только для файлов директорий</td><td>YDB</td><td>$10^10$</td></tr>
+<tr><td>DirectoryAttributes</td><td>Атрибуты директории - только для файлов директорий</td><td>YDB</td><td>$10^12$</td><td></td></tr>
 
-<tr><td>VideoAttributes</td><td>Атрибуты видео - только для файлов видео</td><td>YDB</td><td>$10^10$</td></tr>
+<tr><td>VideoAttributes</td><td>Атрибуты видео - только для файлов видео</td><td>YDB</td><td>$10^12$</td><td></td></tr>
 
-<tr><td>ImageAttributes</td><td>Атрибуты изображения - только для файлов изображений</td><td>YDB</td><td>$10^10$</td></tr>
+<tr><td>ImageAttributes</td><td>Атрибуты изображения - только для файлов изображений</td><td>YDB</td><td>$10^10$</td><td></td></tr>
 
-<tr><td>ArchiveAttributes</td><td>Атрибуты архива - только для файлов zip и rar и tar</td><td>YDB</td><td>$10^10$</td></tr>
+<tr><td>ArchiveAttributes</td><td>Атрибуты архива - только для файлов zip и rar и tar</td><td>YDB</td><td>$10^10$</td><td></td></tr>
 
 <tr><td>ShareLink</td><td>Ссылка, по которой пользователь может просматривать файлы или присоединиться к работе
-над директорией</td><td>YDB</td><td>$10^10$</td></tr>
+над директорией</td><td>YDB</td><td>$10^10$</td><td></td></tr>
 
-<tr><td>Collaborator</td><td>Пользователь, который имеет права для данной директории</td><td>YDB</td><td>$10^10$</td></tr>
+<tr><td>Collaborator</td><td>Пользователь, который имеет права для данной директории</td><td>YDB</td><td>$10^10$</td><td></td></tr>
 
-<tr><td>FavouriteFile</td><td>Файл, который пользователь пометил как избранный</td><td>YDB</td><td>$10^10$</td></tr>
+<tr><td>FavouriteFile</td><td>Файл, который пользователь пометил как избранный</td><td>YDB</td><td>$10^11$</td><td></td></tr>
 
-<tr><td>NodeInteraction</td><td>Факт взаимодействия пользователя с файлом (для "недавних" файлов)</td><td>YDB</td><td>$10^10$</td></tr>
+<tr><td>NodeInteraction</td><td>Факт взаимодействия пользователя с файлом (для "недавних" файлов)</td><td>YDB</td><td>$10^13$</td><td></td></tr>
 
-<tr><td>SearchFact</td><td>Факт совершения поискового запроса (для истории поиска)</td><td>YDB</td><td>$10^10$</td></tr>
+<tr><td>SearchFact</td><td>Факт совершения поискового запроса (для истории поиска)</td><td>YDB</td><td>$10^12$</td><td></td></tr>
 
-<tr><td>VideoBuffer</td><td>Буфер видео на стороне сервера</td><td>YDB</td><td>$10^10$</td></tr>
+<tr><td>VideoBuffer</td><td>Буфер видео на стороне сервера</td><td>YDB</td><td>$10^6$</td><td></td></tr>
 
-<tr><td>VideoToUser</td><td>Информация о том, на какой временной метке остановился пользователь</td><td>YDB</td><td>$10^10$</td></tr>
+<tr><td>VideoToUser</td><td>Информация о том, на какой временной метке остановился пользователь</td><td>YDB</td><td>$10^10$</td><td></td></tr>
 
-<tr><td>Blob</td><td>Бинарное содержимое файла в объектном хранилище</td><td>S3</td><td>$10^10$</td></tr>
+<tr><td>Blob</td><td>Бинарное содержимое файла в объектном хранилище</td><td>S3</td><td>$10^10$</td><td></td></tr>
+
+<tr><td>VideoBuffer</td><td>Буфер, оптимизированный для отдачи видео</td><td>Самописный медиасервер</td><td>$10^10$</td><td></td></tr>
 
 </table>
+
+### Индексы
+
+```
+CREATE INDEX idx_auth_session_user_id ON AUTH_SESSION(user_id);
+
+CREATE INDEX idx_node_owner_id ON NODE(owner_id);
+CREATE INDEX idx_node_updated_by ON NODE(updated_by);
+
+CREATE INDEX idx_video_attributes_thumbnail_file_id ON VIDEO_ATTRIBUTES(thumbnail_file_id);
+
+CREATE INDEX idx_image_attributes_node_id ON IMAGE_ATTRIBUTES(node_id);
+CREATE INDEX idx_image_attributes_thumbnail_file_id ON IMAGE_ATTRIBUTES(thumbnail_file_id);
+
+CREATE INDEX idx_archive_attributes_node_id ON ARCHIVE_ATTRIBUTES(node_id);
+CREATE INDEX idx_archive_attributes_preview_node_id ON ARCHIVE_ATTRIBUTES(preview_node_id);
+
+CREATE INDEX idx_video_buffer_session_id ON VIDEO_BUFFER(session_id);
+CREATE INDEX idx_video_buffer_video_id ON VIDEO_BUFFER(video_id);
+
+CREATE INDEX idx_share_link_created_by ON SHARE_LINK(created_by);
+CREATE INDEX idx_share_link_node_id ON SHARE_LINK(node_id);
+
+CREATE INDEX idx_favourite_file_user_id ON FAVOURITE_FILE(user_id);
+CREATE INDEX idx_favourite_file_node_id ON FAVOURITE_FILE(node_id);
+
+CREATE INDEX idx_user_to_video_video_id ON USER_TO_VIDEO(video_id);
+CREATE INDEX idx_user_to_video_user_id ON USER_TO_VIDEO(user_id);
+
+CREATE INDEX idx_node_interaction_user_id ON NODE_INTERACTION(user_id);
+CREATE INDEX idx_node_interaction_node_id ON NODE_INTERACTION(node_id);
+
+CREATE INDEX idx_search_fact_user_id ON SEARCH_FACT(user_id);
+
+CREATE INDEX idx_trashed_node_user_id ON TRASHED_NODE(user_id);
+
+```
+
 # Список источников
 
 [^1]: https://hypestat.com/info/drive.google.com (дата обращения: 23.02.2025)
