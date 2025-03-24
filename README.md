@@ -534,7 +534,7 @@ erDiagram
 
 <table>
 
-<tr><th>Таблица</th><th>Описание</th><th>СУБД</th><th>Строк<th><th>Ключ шардирования</th></tr>
+<tr><th>Таблица</th><th>Описание</th><th>СУБД</th><th>Строк</th><th>Ключ шардирования</th></tr>
 
 <tr><td>User</td><td>Пользователь</td><td>YDB</td><td>$10^10$</td><td></td></tr>
 
@@ -548,13 +548,13 @@ erDiagram
 
 <tr><td>TrashedNode</td><td>Файл, который находится в корзине</td><td>YDB</td><td>$10^10$</td><td></td></tr>
 
-<tr><td>DirectoryAttributes</td><td>Атрибуты директории - только для файлов директорий</td><td>Redis</td><td>$10^12$</td><td></td></tr>
+<tr><td>DirectoryAttributes</td><td>Атрибуты директории - только для файлов директорий</td><td>JSONB-атрибут</td><td>$10^12$</td><td></td></tr>
 
-<tr><td>VideoAttributes</td><td>Атрибуты видео - только для файлов видео</td><td>Redis</td><td>$10^12$</td><td></td></tr>
+<tr><td>VideoAttributes</td><td>Атрибуты видео - только для файлов видео</td><td>JSONB-атрибут</td><td>$10^12$</td><td></td></tr>
 
-<tr><td>ImageAttributes</td><td>Атрибуты изображения - только для файлов изображений</td><td>Redis</td><td>$10^10$</td><td></td></tr>
+<tr><td>ImageAttributes</td><td>Атрибуты изображения - только для файлов изображений</td><td>JSONB-атрибут</td><td>$10^10$</td><td></td></tr>
 
-<tr><td>ArchiveAttributes</td><td>Атрибуты архива - только для файлов zip и rar и tar</td><td>Redis</td><td>$10^10$</td><td></td></tr>
+<tr><td>ArchiveAttributes</td><td>Атрибуты архива - только для файлов zip и rar и tar</td><td>JSONB-атрибут</td><td>$10^10$</td><td></td></tr>
 
 <tr><td>ShareLink</td><td>Ссылка, по которой пользователь может просматривать файлы или присоединиться к работе
 над директорией</td><td>YDB</td><td>$10^10$</td><td></td></tr>
