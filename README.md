@@ -485,6 +485,11 @@ Nginx как web-сервер.
 | React       | Фронтенд (Web)                            | Компонентный подход, Virtual DOM, богатая экосистема и поддержка сообщества.        |
 | Jetpack Compose | Android (UI)                          | Декларативный UI, упрощение разработки и совместимость с Kotlin.                   |
 | SwiftUI     | iOS/macOS (UI)                            | Декларативный интерфейс, интеграция с экосистемой Apple.                           |
+
+# 9. Схема сервисов
+
+![](image/services_scheme.svg)
+
 # Список источников
 
 [^1]: https://hypestat.com/info/drive.google.com (дата обращения: 23.02.2025)
